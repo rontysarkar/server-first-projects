@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:port":"node ./dist/server.js",
-    "start:dev":"ts-node-dev --respawn --transpile-only ./src/server.ts",
+    "start:port": "node ./dist/server.js",
+    "start:dev": "ts-node-dev --respawn --transpile-only ./src/server.ts",
     "build": "tsc",
     "lint": "eslint .",
     "lint:fix": "npx eslint src --fix",
@@ -20,6 +20,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "joi": "^17.13.3",
     "mongoose": "^8.9.5",
     "ts-node-dev": "^2.0.0"
   },
