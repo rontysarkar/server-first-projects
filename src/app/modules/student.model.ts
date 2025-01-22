@@ -6,6 +6,8 @@ import {
   TStudent,
   TStudentName,
 } from './student/student.interface';
+import bcrypt from 'bcrypt';
+import config from '../config';
 
 const nameSchema = new Schema<TStudentName>({
   firstName: {
@@ -72,6 +74,10 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     type: String,
     required: [true, 'Student ID is required.'],
   },
+  password: {
+    type: String,
+    required: [true, 'Password is required.'],
+  },
   name: {
     type: nameSchema,
     required: [true, "Student's name is required."],
@@ -136,14 +142,40 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     },
     default: 'active',
   },
+  isDeleted:{
+    type:Boolean,
+    default:false
+  }
 });
 
+studentSchema.pre('save',async function (next) {
+  this.password = await bcrypt.hash(this.password,Number(config.bcrypt_salt_rounds))
+  next();
+});
 
-studentSchema.statics.isUserExists = async function(id:string){
-  const existingUser = await Student.findOne({id})
-  return existingUser
-}
+studentSchema.post('save', function(doc,next){
+  doc.password = " ";
+  next()
+})
 
+// query meddle ware
+
+studentSchema.pre('find', function(next){
+  this.find({isDeleted:{$ne :true}})
+  next()
+})
+
+studentSchema.pre('aggregate', function(next){
+  this.pipeline().unshift({$match:{isDeleted :{$ne : true}}})
+  next()
+})
+
+
+
+studentSchema.statics.isUserExists = async function (id: string) {
+  const existingUser = await Student.findOne({ id });
+  return existingUser;
+};
 
 //create a instance methods
 
@@ -153,4 +185,4 @@ studentSchema.statics.isUserExists = async function(id:string){
 //   return existingUser
 // }
 
-export const Student = model<TStudent,StudentModel>('Student', studentSchema);
+export const Student = model<TStudent, StudentModel>('Student', studentSchema);

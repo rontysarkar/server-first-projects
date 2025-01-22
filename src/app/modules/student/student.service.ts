@@ -8,10 +8,7 @@ const createStudent = async (studentData: TStudent) => {
     throw new Error("User exists already")
    }
 
-
    const result = await Student.create(studentData);
-  
-  
     //create a instance methods
 
   // const student = new Student(studentData);
@@ -27,13 +24,20 @@ const getAllStudentsData = async () => {
   return result;
 };
 
-const getSingleStudentData = async (email: string) => {
-  const result = await Student.find({ email: email });
+const getSingleStudentData = async (id: string) => {
+  // const result = await Student.find({ id: id });
+  const result = await Student.aggregate([{$match : {id : id}}])
   return result;
 };
+
+const deleteSingleStudentData = async( id : string) =>{
+  const result = await Student.updateOne({id},{isDeleted:true})
+  return result
+}
 
 export const StudentServices = {
   createStudent,
   getAllStudentsData,
   getSingleStudentData,
+  deleteSingleStudentData,
 };
