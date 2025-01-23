@@ -184,5 +184,7 @@ studentSchema.statics.isUserExists = async function (id: string) {
 
 //   return existingUser
 // }
+const a = 10 ; // practise perpose
+console.log(a);
 
 export const Student = model<TStudent, StudentModel>('Student', studentSchema);
