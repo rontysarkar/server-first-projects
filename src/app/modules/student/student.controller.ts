@@ -1,23 +1,28 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextFunction, Request, Response } from 'express';
+import {  NextFunction, Request, RequestHandler, Response,  } from 'express';
 import { StudentServices } from './student.service';
 
 
+const asyncHandler = (fn:RequestHandler)=>{
 
-const getAllStudentData = async (req: Request, res: Response,next:NextFunction) => {
-  try {
+  return (req:Request,res:Response,next:NextFunction) =>{
+    Promise.resolve(fn(req,res,next)).catch(next)
+  }
+}
+
+const getAllStudentData : RequestHandler = asyncHandler(async (req, res,next) => {
+
     const result = await StudentServices.getAllStudentsData();
     res.status(200).json({
       success: true,
       message: 'student data get successfully',
       data: result,
     });
-  } catch (err) {
-    next(err)
-  }
-};
+});
 
-const getSingleStudentData = async (req: Request, res: Response,next:NextFunction) => {
+const getSingleStudentData :RequestHandler = async (req, res,next) => {
   try {
     const result = await StudentServices.getSingleStudentData(req.params.id);
     res.status(200).json({
@@ -31,7 +36,7 @@ const getSingleStudentData = async (req: Request, res: Response,next:NextFunctio
 };
 
 
-const deleteSingleStudentData = async(req:Request,res:Response) =>{
+const deleteSingleStudentData: RequestHandler= async(req,res) =>{
 
   try{
     const result = await StudentServices.deleteSingleStudentData(req.params.id)
@@ -48,10 +53,6 @@ const deleteSingleStudentData = async(req:Request,res:Response) =>{
     })
   }
 }
-
-
-
-
 
 
 
