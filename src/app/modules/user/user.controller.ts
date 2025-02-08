@@ -1,27 +1,18 @@
-import { NextFunction, Request, Response } from "express";
-import { UserService } from "./user.server";
+import { UserService } from './user.server';
+import asyncHandler from '../../utils/asyncHandler';
 
+const createStudent = asyncHandler(async (req, res) => {
+  const { password, student: studentData } = req.body;
 
-const createStudent = async (req: Request, res: Response,next:NextFunction) => {
-  try {
-   
-    const {password , student: studentData } = req.body;
+  const result = await UserService.createStudent(password, studentData);
 
-    
-   const result = await UserService.createStudent(password,studentData);
-
-    res.status(200).json({
-      success: true,
-      message: 'Student is created successfully',
-      data: result,
-    });
-    
-  } catch (err) {
-    next(err)
-  }
-};
-
+  res.status(200).json({
+    success: true,
+    message: 'Student is created successfully',
+    data: result,
+  });
+});
 
 export const UserControllers = {
-    createStudent,
-}
+  createStudent,
+};
