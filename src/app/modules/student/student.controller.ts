@@ -21,7 +21,7 @@ const getSingleStudentData = asyncHandler(async (req, res) => {
 
 const deleteSingleStudentData = asyncHandler(
   async (req, res) => {
-    const result = await StudentServices.deleteSingleStudentData(req.params.id);
+    const result = await StudentServices.deleteStudentData(req.params.id);
     res.status(200).json({
       success: true,
       message: 'data is update successfully',
