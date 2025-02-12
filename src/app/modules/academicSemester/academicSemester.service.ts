@@ -40,7 +40,7 @@ const updateSemesterDataById = async (
     throw new Error('Give Semester Name Or Semester code in together');
   }
 
-  const result = await AcademicSemester.findByIdAndUpdate(id, payload, {
+  const result = await AcademicSemester.findOneAndUpdate({_id:id}, payload, {
     new: true,
   });
   return result;

@@ -43,7 +43,7 @@ const updateSemesterDataById = asyncHandler(async (req, res) => {
 
   res.status(status.OK).json({
     success: true,
-    message: 'get your semester successfully',
+    message: 'Update Semester successfully',
     data: result,
   });
 });
