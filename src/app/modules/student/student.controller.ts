@@ -3,7 +3,7 @@ import asyncHandler from '../../utils/asyncHandler';
 import status from 'http-status';
 
 const getAllStudentData = asyncHandler(async (req, res) => {
-  const result = await StudentServices.getAllStudentsData();
+  const result = await StudentServices.getAllStudentsData(req.query);
   res.status(200).json({
     success: true,
     message: 'student data get successfully',
