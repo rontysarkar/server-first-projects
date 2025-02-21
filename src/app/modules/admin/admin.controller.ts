@@ -12,8 +12,8 @@ const getAllAdminData = asyncHandler(async (req, res) => {
 });
 
 const getSingleAdminData = asyncHandler(async (req, res) => {
-  const { adminId } = req.params;
-  const result = await AdminServices.getSingleAdminData(adminId);
+  const { id } = req.params;
+  const result = await AdminServices.getSingleAdminData(id);
   res.status(status.OK).json({
     success: true,
     message: 'Admin data get successfully',
@@ -22,25 +22,25 @@ const getSingleAdminData = asyncHandler(async (req, res) => {
 });
 
 const updateAdminData = asyncHandler(async(req,res)=>{
-    const {adminId} = req.params;
-    const adminData = req.body;
+    const {id} = req.params;
+    const adminData = req.body.admin;
 
-    const result = await AdminServices.updateAdminData(adminId,adminData);
+    const result = await AdminServices.updateAdminData(id,adminData);
     res.status(status.OK).json({
         success:true,
-        message:"Admin data get successfully",
+        message:"Admin data updated successfully",
         data:result,
     })
 })
 
 const deletedAdminData = asyncHandler(async(req,res)=>{
 
-    const {adminId} = req.params;
+    const {id} = req.params;
 
-    const result = await AdminServices.deletedAdminData(adminId)
+    const result = await AdminServices.deletedAdminData(id)
     res.status(status.OK).json({
         success:true,
-        message:"Admin data get successfully",
+        message:"Admin data deleted successfully",
         data:result,
     })
 })

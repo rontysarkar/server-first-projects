@@ -14,12 +14,9 @@ router.post(
 );
 
 router.get('/', AcademicFacultyController.getAllAcademicFaculty);
-router.get(
-  '/:facultyId',
-  AcademicFacultyController.getSingleAcademicFacultyById,
-);
+router.get('/:id', AcademicFacultyController.getSingleAcademicFacultyById);
 router.patch(
-  '/:facultyId',
+  '/:id',
   validateRequest(
     academicFacultyValidation.updateAcademicFacultyValidationSchema,
   ),

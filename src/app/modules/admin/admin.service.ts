@@ -13,7 +13,7 @@ const getAllAdminData = async () => {
 };
 
 const getSingleAdminData = async (id: string) => {
-  const result = await Admin.findOne({ id });
+  const result = await Admin.findById(id);
   return result;
 };
 
@@ -30,7 +30,7 @@ const updateAdminData = async (id: string, payload: Partial<TAdmin>) => {
     }
   }
 
-  const result = await Admin.findOneAndUpdate({ id }, modifiedUpdateData, {
+  const result = await Admin.findByIdAndUpdate(id, modifiedUpdateData, {
     new: true,
   });
 
@@ -43,23 +43,25 @@ const deletedAdminData = async (id: string) => {
   try {
     session.startTransaction();
 
-    const deletedUser = await User.findOneAndUpdate(
-      { id },
-      { isDeleted: true },
-      { new: true,session },
-    );
-
-    if (!deletedUser) {
-      throw new AppError(status.BAD_REQUEST, 'Fail to delete User');
-    }
-
-    const deletedAdmin = await Admin.findOneAndUpdate(
-      { id },
+    const deletedAdmin = await Admin.findByIdAndUpdate(
+      id,
       { isDeleted: true },
       { new: true },
     );
     if (!deletedAdmin) {
       throw new AppError(status.BAD_REQUEST, 'fail to deleted admin');
+    }
+
+    const userID = deletedAdmin.user;
+
+    const deletedUser = await User.findOneAndUpdate(
+      userID,
+      { isDeleted: true },
+      { new: true, session },
+    );
+
+    if (!deletedUser) {
+      throw new AppError(status.BAD_REQUEST, 'Fail to delete User');
     }
 
     return deletedAdmin;
@@ -71,8 +73,8 @@ const deletedAdminData = async (id: string) => {
 };
 
 export const AdminServices = {
-    getAllAdminData,
-    getSingleAdminData,
-    updateAdminData,
-    deletedAdminData,
-}
+  getAllAdminData,
+  getSingleAdminData,
+  updateAdminData,
+  deletedAdminData,
+};

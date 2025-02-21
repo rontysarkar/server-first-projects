@@ -8,7 +8,6 @@ import QueryBuilder from '../../builder/QueryBuilder';
 
 const getAllStudentsData = async (query: Record<string, unknown>) => {
   // Raw Query >>>
-
   const searchAbleField = [
     'email',
     'guardian.fatherName',
@@ -94,7 +93,7 @@ const getAllStudentsData = async (query: Record<string, unknown>) => {
 
 const getSingleStudentData = async (id: string) => {
   // const result = await Student.find({ id: id });
-  const result = await Student.findOne({ id })
+  const result = await Student.findById(id )
     .populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
@@ -130,7 +129,7 @@ const updateStudentData = async (id: string, payload: Partial<TStudent>) => {
     }
   }
 
-  const result = await Student.findOneAndUpdate({ id }, modifiedUpdateData, {
+  const result = await Student.findByIdAndUpdate( id , modifiedUpdateData, {
     new: true,
   });
   return result;
@@ -142,8 +141,8 @@ const deleteStudentData = async (id: string) => {
   try {
     session.startTransaction();
 
-    const deletedStudentData = await Student.findOneAndUpdate(
-      { id },
+    const deletedStudentData = await Student.findByIdAndUpdate(
+      id ,
       { isDeleted: true },
       { new: true, session },
     );
@@ -151,8 +150,10 @@ const deleteStudentData = async (id: string) => {
       throw new AppError(status.BAD_REQUEST, 'student data deleted fail');
     }
 
-    const deletedUserData = await User.findOneAndUpdate(
-      { id },
+    const userId = deletedStudentData?.user
+
+    const deletedUserData = await User.findByIdAndUpdate(
+      userId,
       { isDeleted: true },
       { new: true, session },
     );

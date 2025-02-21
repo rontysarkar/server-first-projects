@@ -6,7 +6,7 @@ import { FacultyServices } from "./faculty.service";
 
 
 const getAllFacultyData = asyncHandler(async (req, res) => {
-    const result = await FacultyServices.getAllFacultyData();
+    const result = await FacultyServices.getAllFacultyData(req.query);
     res.status(200).json({
       success: true,
       message: 'Faculty data get successfully',
@@ -15,7 +15,7 @@ const getAllFacultyData = asyncHandler(async (req, res) => {
   });
   
   const getSingleFacultyData = asyncHandler(async (req, res) => {
-    const result = await FacultyServices.getSingleFacultyData(req.params.facultyId);
+    const result = await FacultyServices.getSingleFacultyData(req.params.id);
     res.status(200).json({
       success: true,
       message: 'Faculty single data get successfully',
@@ -24,9 +24,9 @@ const getAllFacultyData = asyncHandler(async (req, res) => {
   });
   
   const updateFacultyData = asyncHandler(async (req, res) => {
-    const { facultyId } = req.params;
+    const { id } = req.params;
     const { faculty } = req.body;
-    const result = await FacultyServices.updateFacultyData(facultyId, faculty);
+    const result = await FacultyServices.updateFacultyData(id, faculty);
     res.status(status.OK).json({
       success: true,
       message: 'Update data successfully',
@@ -38,7 +38,7 @@ const getAllFacultyData = asyncHandler(async (req, res) => {
     const result = await FacultyServices.deleteFacultyData(req.params.id);
     res.status(200).json({
       success: true,
-      message: 'data is update successfully',
+      message: 'data  delete successfully',
       data: result,
     });
   });

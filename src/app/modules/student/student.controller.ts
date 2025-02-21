@@ -21,9 +21,9 @@ const getSingleStudentData = asyncHandler(async (req, res) => {
 });
 
 const updateStudentData = asyncHandler(async (req, res) => {
-  const { id: studentId } = req.params;
+  const { id } = req.params;
   const { student } = req.body;
-  const result = await StudentServices.updateStudentData(studentId, student);
+  const result = await StudentServices.updateStudentData(id, student);
   res.status(status.OK).json({
     success: true,
     message: 'Update data successfully',
@@ -35,7 +35,7 @@ const deleteSingleStudentData = asyncHandler(async (req, res) => {
   const result = await StudentServices.deleteStudentData(req.params.id);
   res.status(200).json({
     success: true,
-    message: 'data is update successfully',
+    message: 'data is deleted successfully',
     data: result,
   });
 });
