@@ -27,9 +27,7 @@ const createStudentValidationSchema = z.object({
       password: z.string(),
       name: nameValidationSchema,
       gender: z.enum(['male', 'female', 'other']),
-      dateOfBirth: z.string().refine((val) => !isNaN(Date.parse(val)), {
-        message: 'Invalid date format',
-      }),
+      dateOfBirth: z.string().optional(),
       email: z.string().email(),
       contactNo: z.string(),
       emergencyContactNo: z.string(),

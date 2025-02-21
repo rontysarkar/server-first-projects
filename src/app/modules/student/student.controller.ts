@@ -21,9 +21,9 @@ const getSingleStudentData = asyncHandler(async (req, res) => {
 });
 
 const updateStudentData = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { id: studentId } = req.params;
   const { student } = req.body;
-  const result = await StudentServices.updateStudentData(id, student);
+  const result = await StudentServices.updateStudentData(studentId, student);
   res.status(status.OK).json({
     success: true,
     message: 'Update data successfully',
