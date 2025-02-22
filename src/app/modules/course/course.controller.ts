@@ -49,6 +49,27 @@ const deleteCourse = asyncHandler(async(req,res)=>{
         data:result
     })
 })
+const assignFacultiesWithCourse = asyncHandler(async(req,res)=>{
+    const {courseId} = req.params;
+    const {faculties} = req.body;
+    const result = await CourseServices.assignFacultiesWithCourseIntoDB(courseId,faculties);
+    res.status(status.OK).json({
+        success:true,
+        message:"faculties assign  successfully",
+        data:result
+    })
+})
+
+const removeFacultiesFromCourse = asyncHandler(async(req,res)=>{
+    const {courseId} = req.params;
+    const {faculties} = req.body;
+    const result = await CourseServices.removeFacultiesFromCourseFromDB(courseId,faculties);
+    res.status(status.OK).json({
+        success:true,
+        message:"faculties remove  successfully",
+        data:result
+    })
+})
 
 
 
@@ -58,4 +79,6 @@ export const CourseControllers = {
     getSingleCourse,
     updateCourse,
     deleteCourse,
+    assignFacultiesWithCourse,
+    removeFacultiesFromCourse,
 }
