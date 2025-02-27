@@ -12,7 +12,19 @@ const createOfferedCourse = asyncHandler(async(req,res) =>{
     })
 })
 
+const updateOfferedCourse = asyncHandler(async(req,res) =>{
+
+    const {id} = req.params
+    const result = await OfferedCourseServices.updateOfferedCourseIntoDB(id,req.body)
+    res.status(status.OK).json({
+        success:true,
+        message:"Offered Course update successfully",
+        data:result,
+    })
+})
+
 
 export const OfferedCourseControllers = {
     createOfferedCourse,
+    updateOfferedCourse,
 }

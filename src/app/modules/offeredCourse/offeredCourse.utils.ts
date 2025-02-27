@@ -1,6 +1,6 @@
 import { TSchedule } from './offeredCourse.interface';
 
-export const hastTimeConflict = (
+export const hasTimeConflict = (
   assignSchedules: TSchedule[],
   newAssignSchedule: TSchedule,
 ) => {
