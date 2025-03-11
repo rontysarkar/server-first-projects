@@ -24,6 +24,8 @@ import { AcademicDepartment } from '../academicDeparment/academicDepartment.mode
 const createStudent = async (password: string, payload: TStudent) => {
   const userData: Partial<TUser> = {};
 
+  // console.log({password});
+
   //   if password not given then set default password
   userData.password = password || (config.default_password as string);
 

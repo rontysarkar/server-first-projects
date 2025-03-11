@@ -2,7 +2,8 @@ import { UserService } from './user.server';
 import asyncHandler from '../../utils/asyncHandler';
 
 const createStudent = asyncHandler(async (req, res) => {
-  const { password, student: studentData } = req.body;
+  const { student: studentData } = req.body;
+  const {password} = studentData
   const result = await UserService.createStudent(password, studentData);
 
   res.status(200).json({
