@@ -1,13 +1,14 @@
 import status from "http-status";
 import AppError from "../../errors/AppError";
 import { User } from "../user/user.model";
-import { TLoginUser } from "./auth.interface";
+import { TChangePassword, TLoginUser } from "./auth.interface";
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import config from "../../config";
 
 const loginUser = async(payload:TLoginUser)=>{
     // check user is exist 
+    
     const isUserExist = await User.isUserExistByCustomId(payload.id)
     
     if(!isUserExist){
@@ -27,8 +28,8 @@ const loginUser = async(payload:TLoginUser)=>{
     }
 
     // checking password is correct 
+    const passwordMatch = await User.isPasswordMatch(payload.password,isUserExist?.password)
 
-    const passwordMatch = await bcrypt.compare(payload.password,isUserExist?.password)
     if(!passwordMatch){
         throw new AppError(status.FORBIDDEN,"Password is incorrect")
     }
@@ -40,9 +41,9 @@ const loginUser = async(payload:TLoginUser)=>{
         role:isUserExist?.role,
     }
 
-    const accessToken = jwt.sign({
+    const accessToken = jwt.sign(
         jwtPayload
-      }, config.jwt_access_secret as string, { expiresIn: "10d" });
+      , config.jwt_access_secret as string, { expiresIn: "10d" });
 
 
 
@@ -52,6 +53,38 @@ const loginUser = async(payload:TLoginUser)=>{
     };
 }
 
+
+
+const changePassword = async(reqUser:JwtPayload,payload:TChangePassword)=>{
+    console.log(reqUser,payload);
+
+    const user = await User.isUserExistByCustomId(reqUser.userId)
+    console.log({user});
+
+    if(!user){
+        throw new AppError(status.NOT_FOUND,"User not found")
+    }
+
+    // check user is deleted
+    const isDeleted = user?.isDeleted
+    if(isDeleted){
+        throw new AppError(status.FORBIDDEN,"User is Deleted ")
+    }
+
+    // check user is blocked
+    if(user?.status === 'blocked'){
+        throw new AppError(status.FORBIDDEN,"User is blocked")
+    }
+
+    // check olg password match 
+    const passwordMatch = await User.isPasswordMatch(payload.oldPassword,user?.password)
+    if(!passwordMatch){
+        throw new AppError(status.FORBIDDEN,"old password is incorrect")
+    }
+
+}
+
 export const AuthServices = {
     loginUser,
+    changePassword
 }

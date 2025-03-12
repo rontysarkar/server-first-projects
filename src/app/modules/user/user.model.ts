@@ -6,7 +6,7 @@ import config from '../../config';
 const userSchema = new Schema<TUser,UserModel>(
   {
     id: { type: String, required: true,unique:true, },
-    password: { type: String, required: true },
+    password: { type: String,select:0 },
     needsPasswordChange: { type: Boolean,default:true },
     role: {
       type: String,
@@ -38,7 +38,11 @@ userSchema.post('save', function (doc, next) {
 });
 
 userSchema.statics.isUserExistByCustomId = async function(id:string){
-  return await User.findOne({id})
+  return await User.findOne({id}).select('+password')
 }
+
+userSchema.statics.isPasswordMatch = async function(password:string,hashPassword:string){
+  return await bcrypt.compare(password,hashPassword)
+} 
 
 export const User = model<TUser,UserModel>('User', userSchema);
