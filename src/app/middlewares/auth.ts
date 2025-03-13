@@ -16,34 +16,32 @@ const auth = (...requiredRoles: TUserRole[]) => {
       if (!token) {
         throw new AppError(status.UNAUTHORIZED, 'You are unauthorized user');
       }
+
       // check token is valid
 
-      jwt.verify(
-        token,
-        config.jwt_access_secret as string,
-        function (err, decoded) {
-          // err
-          if (err) {
-            throw new AppError(
-              status.UNAUTHORIZED,
-              'You are unauthorized user',
-            );
-          }
+        const decoded = jwt.verify(token, config.jwt_access_secret as string)as JwtPayload;
 
-          const role = (decoded as JwtPayload).role;
+        const {role,userId} = decoded
 
-          if (requiredRoles && !requiredRoles.includes(role)) {
-            throw new AppError(
-              status.UNAUTHORIZED,
-              'You are unauthorized user',
-            );
-          }
+        if (requiredRoles && !requiredRoles.includes(role)) {
+          throw new AppError(
+            status.UNAUTHORIZED,
+            'You are unauthorized user',
+          );
+        }
 
-          // decoded undefined
-          req.user = decoded as JwtPayload;
-          next();
-        },
-      );
+        // decoded undefined
+        req.user = decoded as JwtPayload;
+        next();
+
+      
+
+
+
+      
+
+      
+    
     },
   );
 };
