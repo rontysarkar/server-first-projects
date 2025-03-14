@@ -26,9 +26,7 @@ const createFaculty = asyncHandler(async (req, res) => {
   });
 });
 const createAdmin = asyncHandler(async (req, res) => {
-  const { admin } = req.body;
-  const {password} = admin;
-
+  const {password, admin } = req.body;
   const result = await UserService.createAdmin(password, admin);
 
   res.status(200).json({

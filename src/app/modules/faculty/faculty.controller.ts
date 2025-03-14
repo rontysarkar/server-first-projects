@@ -5,6 +5,7 @@ import { FacultyServices } from "./faculty.service";
 
 
 const getAllFacultyData = asyncHandler(async (req, res) => {
+
     const result = await FacultyServices.getAllFacultyData(req.query);
     res.status(200).json({
       success: true,

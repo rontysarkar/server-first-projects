@@ -24,4 +24,5 @@ export type TUserRole = keyof typeof USER_ROLE
 export interface UserModel extends Model<TUser> {
     isUserExistByCustomId(id:string): Promise<TUser>;
     isPasswordMatch(password:string,hashPassword:string):Promise<boolean>
+    isJwtIssuedBeforePasswordChange(passwordChangeTimestamp:Date,jwtIssuedTimestamp:number):boolean
   }
